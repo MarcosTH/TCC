@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/template.xhtml">
+
+
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="matacao" value="#{MBMateriais.acao}" />
+			<f:viewParam name="matcod" value="#{MBMateriais.codigo}" />
+			<f:event listener="#{MBMateriais.carregarCadastro}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+
+
+	<ui:define name="conteudo">
+
+
+		<h:form id="frmmatcad">
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Material" />
+				</f:facet>
+			</p:toolbar>
+			<h:panelGrid columns="2" id="pnmatcad">
+				<p:outputLabel value="ID" />
+				<p:inputText maxlength="20" size="20" readonly="true"
+					value="#{MBMateriais.materiais.id}" />
+
+				<p:outputLabel value="Código" />
+				<p:inputText maxlength="20" size="20"
+					value="#{MBMateriais.materiais.codigo}" />
+
+				<p:outputLabel value="Nome" />
+				<p:inputText maxlength="50" size="20"
+					value="#{MBMateriais.materiais.nome}"
+					readonly="#{MBMateriais.acao == 'Excluir' }" />
+
+				<p:outputLabel value="Preço Unitário" />
+				<p:inputText maxlength="50" size="20"
+					value="#{MBMateriais.materiais.preco}"
+					readonly="#{MBMateriais.acao == 'Excluir' }" />
+
+				<p:outputLabel value="Estoque" />
+				<p:inputText maxlength="50" size="20"
+					value="#{MBMateriais.materiais.quantidade}"
+					readonly="#{MBMateriais.acao == 'Excluir' }" />
+
+				<p:outputLabel value="Estoque mínimo" />
+				<p:inputText maxlength="50" size="20"
+					value="#{MBMateriais.materiais.estoqueMinimo}"
+					readonly="#{MBMateriais.acao == 'Excluir' }" />
+
+
+				<p:outputLabel value="Fornecedor:" />
+				<p:selectOneMenu value="#{MBMateriais.materiais.fornecedor}"
+					readonly="#{MBMateriais.acao == 'Excluir'}"
+					converter="fornecedoresConverter">
+					<f:selectItem itemValue="" itemLabel="Selecione um Fornecedor" />
+
+					<f:selectItems value="#{MBMateriais.listaFornecedores}"
+						var="fornecedor" itemValue="#{fornecedor}"
+						itemLabel="#{fornecedor.nome}" />
+					<f:validateBean />
+				</p:selectOneMenu>
+
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="5">
+				<p:button value="Novo" actionListener="#{MBMateriais.novo()}" />
+
+				<p:commandButton value="Salvar"
+					actionListener="#{MBMateriais.salvar()}"
+					update=":msgGlobal :frmmatcad:pnmatcad" />
+
+
+				<p:commandButton value="Excluir"
+					actionListener="#{MBMateriais.excluir()}" update=":msgGlobal"
+					rendered="#{MBMateriais.acao == 'Excluir' }" />
+
+				<p:commandButton value="Editar"
+					actionListener="#{MBMateriais.editar()}" update=":msgGlobal  :frmmatcad:pnmatcad"
+					rendered="#{MBMateriais.acao == 'Editar' }" />
+
+
+				<p:button value="Voltar" outcome="/pages/MaterialPesquisa.xhtml" />
+			</h:panelGrid>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

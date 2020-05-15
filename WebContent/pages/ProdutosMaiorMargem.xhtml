@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/template.xhtml">
+
+
+	<ui:define name="conteudo">
+		<f:metadata>
+<f:event listener="#{MBCusto.carregarMargem()}"
+				type="preRenderView" />
+			
+		</f:metadata>
+		
+	
+		<h:form >
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Pesquisar produtos por custos" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:separator />
+				
+			<!--  tabela principal -->
+			<p:dataTable emptyMessage="Nenhum registro cadastrado"
+				value="#{MBCusto.custos}"
+				filteredValue="#{MBCusto.custosFiltrados}" var="custo"
+				rows="6" paginator="true">
+				
+
+				<p:column headerText="Produto:" filterBy="#{custo.produto.nome}"
+					srtBy="#{custo.produto.nome}">
+					<h:outputText value="#{custo.produto.nome}" />
+				</p:column>
+
+
+				<p:column headerText="Custo:">
+					<h:outputText value="#{custo.custo}" />
+				</p:column>
+				
+				<p:column headerText="Margem:" filterBy="#{custo.margem}">
+					<h:outputText value="#{custo.margem}" />
+				</p:column>
+
+				<p:column headerText="Opcões">
+				<p:button icon="ui-icon-pencil"
+						outcome="/pages/CustoCadastro.xhtml">
+						<f:param name="cuscod" value="#{custo.id}" />
+						<f:param name="cusacao" value="Gerar custo" />
+						
+					</p:button>
+			</p:column>
+
+			</p:dataTable>
+
+					
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

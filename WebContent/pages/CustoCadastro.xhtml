@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/template.xhtml">
+
+
+	<ui:define name="metadata">
+		<f:metadata>
+
+			<f:event listener="#{MBCusto.carregarMateriais()}"
+				type="preRenderView" />
+						
+						<f:event listener="#{MBCusto.carregarProdutos()}"
+				type="preRenderView" />
+			
+			<f:viewParam name="procod" value="#{MBCusto.codigo}" />
+			<f:event listener="#{MBCusto.pegarProduto()}" 
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+	<ui:define name="conteudo">
+	
+ 
+<!-- painel que mostra o produto selecionado -->
+			<h:panelGrid columns="3">
+									
+		<h:form>
+		
+		<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Produto" />
+				</f:facet>
+			</p:toolbar>
+			<h:panelGrid columns="2" id="pncuscad">
+				
+				<p:outputLabel value="ID:"  />
+				<p:inputText maxlength="20" size="20" readonly="true"
+					value="#{MBCusto.produto.id}" id="produtoCodigo"  />
+				
+					<p:outputLabel value="Nome:" />
+				<p:inputText maxlength="20" size="20" readonly="true"			
+					value="#{MBCusto.produto.nome}" >
+									
+					</p:inputText>
+					
+						<p:outputLabel value="Preco:" />
+				<p:inputText maxlength="20" size="20" readonly="true"			
+					value="#{MBCusto.produto.precoVenda}" >
+									
+					</p:inputText>
+							<p:button value="Voltar" outcome = "/pages/ProdutoPesquisa.xhtml" />			
+					
+					</h:panelGrid>
+		</h:form>
+
+				</h:panelGrid>
+						
+	
+		<h:form id="frmcuscad">
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Montar Custo do produto" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:separator />
+				
+			<!--  tabela principal -->
+			<p:dataTable emptyMessage="Nenhum registro cadastrado"
+				value="#{MBCusto.materiais}"
+				filteredValue="#{MBCusto.materiaisFiltrados}" var="material"
+				rows="6" paginator="true">
+				<p:column headerText="ID">
+					<h:outputText value="#{material.id}" />
+				</p:column>
+				<p:column headerText="Código" filterBy="#{material.codigo}"
+					srtBy="#{material.codigo}">
+					<h:outputText value="#{material.codigo}" />
+				</p:column>
+
+				<p:column headerText="Nome" filterBy="#{material.nome}"
+					srtBy="#{material.nome}">
+					<h:outputText value="#{material.nome}" />
+				</p:column>
+
+				<p:column headerText="Preço Unitário">
+					<h:outputText value="#{material.preco}" />
+				</p:column>
+
+				<p:column headerText="Opcões">
+					<p:commandButton icon="ui-icon-plus"
+						actionListener="#{MBCusto.adicionarMaterial(material)}"
+						update=":frmcuscad:tbitens :frmcuscad:txtCustoFinal ">
+ 
+					</p:commandButton>
+
+				</p:column>
+
+			</p:dataTable>
+
+			<p:separator />
+			<!--  tabela de itens -->
+			<p:dataTable emptyMessage="custos" value="#{MBCusto.itens}"
+				var="item" rows="4" paginator="true" id="tbitens" >
+				<p:column headerText="ID">
+					<h:outputText value="#{material.id}" />
+				</p:column>
+
+				<p:column headerText="Nome">
+					<h:outputText value="#{item.material.nome}" />
+				</p:column>
+
+				<p:column headerText="Valor parcial">
+					<h:outputText value="#{item.valorParcial}" />
+				</p:column>
+
+				<p:column headerText="quantidade">
+					<h:outputText value="#{item.quantidade}" />
+				</p:column>
+
+				<p:column headerText="opcoes">
+					<p:commandButton icon="ui-icon-minus"
+						actionListener="#{MBCusto.remover(item)}"
+						update=":frmcuscad:tbitens :frmcuscad:txtCustoFinal " />
+				</p:column>
+
+			</p:dataTable>
+			<p:separator />
+
+			<h:panelGrid columns="1">
+
+				<h:outputText id="txtCustoFinal"
+					value="#{MBCusto.custoCadastro.custo}" />
+				<p:commandButton value="Finalizar custo" actionListener="#{MBCusto.carregarDados()}"
+					oncomplete="PF('dlgcusCusto').show()" update=":dial" ></p:commandButton>
+			</h:panelGrid>
+
+		</h:form>
+
+		<p:dialog closable="true" draggable="true" resizable="false"
+			modal="true" header="Finalizar custo" widgetVar="dlgcusCusto"
+			appendTo="@(body)" id="dial">
+			<h:form>
+				<h:panelGrid columns="2">
+					<h:outputText value="Data" />
+					<h:outputText value="#{MBCusto.custoCadastro.data}" >
+					<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>					
+					<h:outputText value="Custo" />
+					<h:outputText value="#{MBCusto.custoCadastro.custo}"   >
+						<f:convertNumber pattern="#,##0.00"/>
+						</h:outputText>
+					
+					<h:outputText value="Margem de lucro" />
+					<h:outputText  value="#{MBCusto.custoCadastro.margem}"   >
+					<f:convertNumber pattern="#,##0.00"/>
+					</h:outputText>  
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+
+						<p:commandButton value="Salvar custo" actionListener="#{MBCusto.salvar()}" update=":msgGlobal :frmcuscad:tbitens :frmcuscad:txtCustoFinal " 
+						onclick="PF('dlgFinCusto').hide()"></p:commandButton>
+						<p:commandButton value="Voltar" onclick="PF('dlgcusCusto').hide()"></p:commandButton>
+					
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>

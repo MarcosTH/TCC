@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/template.xhtml">
+
+	<h:outputStylesheet library="css" name="style.css" />
+
+
+	<ui:define name="metadata">
+	<script type="text/javascript">
+function mouseOver() {
+    document.getElementById("demo").style.color = "red";
+}
+
+function mouseOut() {
+    document.getElementById("demo").style.color = "black";
+}
+</script>
+		<f:metadata>
+
+			<f:event listener="#{AutenticacaoMB.contarProdutos()}"
+				type="preRenderView" />
+			<f:event listener="#{AutenticacaoMB.contarCustos()}"
+				type="preRenderView" />
+			<f:event listener="#{AutenticacaoMB.contarLotes()}"
+				type="preRenderView" />
+			<f:event listener="#{AutenticacaoMB.contarMateriais()}"
+				type="preRenderView" />
+			<f:event listener="#{AutenticacaoMB.contarNotas()}"
+				type="preRenderView" />
+				<f:event listener="#{AutenticacaoMB.contarGraficos()}"
+				type="preRenderView" />
+				<f:event listener="#{AutenticacaoMB.contarFuncionarios()}"
+				type="preRenderView" />
+				<f:event listener="#{AutenticacaoMB.contarDevolvidos()}"
+				type="preRenderView" />
+				<f:event listener="#{AutenticacaoMB.contarRelatorios()}"
+				type="preRenderView" />
+				<f:event listener="#{AutenticacaoMB.contarUsuarios()}"
+				type="preRenderView" />
+
+
+
+
+		</f:metadata>
+
+	</ui:define>
+
+
+
+	<ui:define name="conteudo">
+		<h:outputLabel>
+
+			<h:outputText
+				value=" Bem vindo  #{AutenticacaoMB.usuarioLogado.funcionario.nome } ! "
+				style="font-size: 20px; bold" />
+		</h:outputLabel>
+		<p:separator></p:separator>
+
+
+		<p:panel>
+		
+
+			<p:layout style="min-width:400px;min-height:600px;" id="layout">
+				
+				<p:layoutUnit position="center">
+					<h:form>
+						<p:spacer width="70" height="70" />
+						<!-- produtos -->
+						<p:outputPanel style="display:inline" styleClass="box" >
+							<h:commandLink action="/pages/ProdutoPesquisa.xhtml">
+								<h:graphicImage styleClass="imagem"
+									value="#{resource['images/produtosCadastrados.fw.png']}"
+									height="140" width="150"  />
+							</h:commandLink>
+
+							<p:outputLabel>
+								<h:outputText value=" #{AutenticacaoMB.qtdProdutos}  "
+									style="font-size: 35px; bold ;  color: red "  />
+							</p:outputLabel>
+						</p:outputPanel>
+						
+						<!-- materiais -->
+						<p:outputPanel style="display:inline" styleClass="box">
+							<p:spacer width="70" height="70" />
+							<h:commandLink action="/pages/MaterialPesquisa.xhtml">
+								<h:graphicImage styleClass="imagem"
+									value="#{resource['images/materiaisCadastrados.fw.png']}" 
+									height="150" width="150" />
+							</h:commandLink>
+							<p:outputLabel>
+								<h:outputText value=" #{AutenticacaoMB.qtdMateriais}  "
+									style="font-size: 35px; bold ;  color: red" />
+							</p:outputLabel>
+						</p:outputPanel>
+
+						<!-- custos -->
+						<p:spacer width="70" height="70" />
+						<p:outputPanel style="display:inline" styleClass="box">
+							<h:commandLink action="/pages/CustoPesquisa.xhtml">
+								<h:graphicImage styleClass="imagem"
+									value="#{resource['images/CustosCalculados.fw.png']}"
+									height="140" width="150" />
+							</h:commandLink>
+							<p:outputLabel>
+								<h:outputText value=" #{AutenticacaoMB.qtdCusto}  "
+									style="font-size: 35px; bold ;  color: red" />
+
+							</p:outputLabel>
+						</p:outputPanel>
+						<!-- estatisticas -->
+						<p:spacer width="70" height="70" />
+
+						<p:outputPanel style="display:inline" styleClass="box">
+							<h:commandLink action="/pages/ProdutosMaiorMargem.xhtml">
+								<h:graphicImage styleClass="imagem"
+									value="#{resource['images/Estatisticas.fw.png']}" height="150"
+									width="150" />
+							</h:commandLink>
+							<p:outputLabel>
+								<h:outputText value=" #{AutenticacaoMB.qtdGraficos}  "
+									style="font-size: 35px; bold ;  color: red" />
+
+							</p:outputLabel>
+						</p:outputPanel>
+						<!-- lotes -->
+						<p:spacer width="70" height="70" />
+
+						<p:outputPanel style="display:inline" styleClass="box">
+							<h:commandLink action="/pages/LotePesquisa.xhtml">
+								<h:graphicImage value="#{resource['images/lotes.fw.png']}" styleClass="imagem"
+									height="160" width="150" />
+							</h:commandLink>
+							<p:outputLabel>
+								<h:outputText value=" #{AutenticacaoMB.qtdLotes}  "
+									style="font-size: 35px; bold ;  color: red" />
+
+							</p:outputLabel>
+						</p:outputPanel>
+						<br />
+						<br />
+						<br />
+						<br />
+
+						<!-- notas -->
+						<p:spacer width="70" height="70" />
+
+						<p:outputPanel style="display:inline" styleClass="box">
+							<h:commandLink action="/pages/NFPesquisa.xhtml">
+								<h:graphicImage value="#{resource['images/notas.fw.png']}" styleClass="imagem"
+									height="150" width="150" />
+							</h:commandLink>
+							<p:outputLabel>
+								<h:outputText value=" #{AutenticacaoMB.qtdNotas}  "
+									style="font-size: 35px; bold ;  color: red" />
+
+							</p:outputLabel>
+						</p:outputPanel>
+						
+						
+						
+						<!-- relatorios -->
+						<p:spacer width="70" height="70" />
+
+						<p:outputPanel style="display:inline" styleClass="box">
+							<h:commandLink action="/pages/NFPesquisa.xhtml">
+								<h:graphicImage value="#{resource['images/Relatorios.fw.png']}" styleClass="imagem"
+									height="160" width="150" />
+							</h:commandLink>
+							<p:outputLabel>
+								<h:outputText value=" #{AutenticacaoMB.qtdRelatorios}  "
+									style="font-size: 35px; bold ;  color: red" />
+
+							</p:outputLabel>
+						</p:outputPanel>
+						
+						<!-- Usuarios -->
+						<p:spacer width="70" height="70" />
+
+						<p:outputPanel style="display:inline" styleClass="box">
+							<h:commandLink action="/pages/UsuarioPesquisa.xhtml">
+								<h:graphicImage value="#{resource['images/Usuarios.fw.png']}" styleClass="imagem"
+									height="150" width="150" />
+							</h:commandLink>
+							<p:outputLabel>
+								<h:outputText value=" #{AutenticacaoMB.qtdUsuarios}  "
+									style="font-size: 35px; bold ;  color: red" />
+
+							</p:outputLabel>
+						</p:outputPanel>
+
+						<!-- Funcionarios -->
+						<p:spacer width="70" height="70" />
+
+						<p:outputPanel style="display:inline" styleClass="box">
+							<h:commandLink action="/pages/FuncionarioPesquisa.xhtml">
+								<h:graphicImage value="#{resource['images/ativos.fw.png']}" styleClass="imagem"
+									height="140" width="150" />
+							</h:commandLink>
+							<p:outputLabel>
+								<h:outputText value=" #{AutenticacaoMB.qtdFuncionarios}  "
+									style="font-size: 35px; bold ;  color: red" />
+
+							</p:outputLabel>
+						</p:outputPanel>
+						
+						<!-- devolvidos -->
+						<p:spacer width="70" height="70" />
+
+						<p:outputPanel style="display:inline" styleClass="box">
+							<h:commandLink action="/pages/ProdutoPesquisa.xhtml">
+								<h:graphicImage value="#{resource['images/devolvidos.fw.png']}" styleClass="imagem"
+									height="150" width="150" />
+							</h:commandLink>
+							<p:outputLabel>
+								<h:outputText value=" #{AutenticacaoMB.qtdDevolvidos}  "
+									style="font-size: 35px; bold ;  color: red" />
+
+							</p:outputLabel>
+						</p:outputPanel>
+
+					</h:form>
+
+
+				</p:layoutUnit>
+			</p:layout>
+
+
+
+		</p:panel>
+
+
+	</ui:define>
+
+</ui:composition>

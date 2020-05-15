@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/template.xhtml">
+
+
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="usuacao" value="#{UsuarioMB.acao}" />
+			<f:viewParam name="usucod" value="#{UsuarioMB.codigo}" />
+			<f:event listener="#{UsuarioMB.carregarCadastro}"
+				type="preRenderView" />
+				
+<f:event listener="#{UsuarioMB.carregarFuncionarios()}"
+				type="preRenderView" />
+		
+		</f:metadata>
+	</ui:define>
+
+	<ui:define name="conteudo">
+
+		<h:form id="frmusucad">
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Usuario" />
+				</f:facet>
+			</p:toolbar>
+			
+			<h:panelGrid columns="2" id="pnusucad">
+				<p:outputLabel value="Código" />
+				<p:inputText maxlength="20" size="20" readonly="true"
+					value="#{UsuarioMB.usuario.id}" />
+														
+
+				<p:outputLabel  value ="Funcionario:"  />
+				<p:selectOneMenu value="#{UsuarioMB.usuario.funcionario}"
+					readonly="#{UsuarioMB.acao == 'Excluir'}"
+					converter="funcionariosConverter">
+					<f:selectItem itemValue="" itemLabel="Selecione um Funcionário" />
+					<f:selectItems value="#{UsuarioMB.funcionarios}" var="funcionario"
+						itemValue="#{funcionario}" itemLabel="#{funcionario.nome}" />
+					<f:validateBean />
+				</p:selectOneMenu>
+
+				<p:outputLabel for="tipo" value="Tipo:" />
+				<p:selectOneRadio id="tipo" value="#{UsuarioMB.usuario.tipo}"
+					required="true" requiredMessage="O campo 'Tipo' ´obrigatório">
+					<f:selectItem itemValue="A" itemLabel="Administrador" />
+					<f:selectItem itemValue="G" itemLabel="Gerente" />
+					<f:selectItem itemValue="P" itemLabel="Producao" />
+				</p:selectOneRadio>
+				
+				<p:outputLabel for="senha" value="Senha:" />
+				<p:password id="senha" maxlength="8" size="10"
+					value="#{UsuarioMB.usuario.senha}" required="true"
+					requiredMessage="O campo 'Senha' é obrigatório"
+					validatorMessage="Informe uma senha de 5 a 8 caracteres">
+					<f:validateLength minimum="5" maximum="8" />
+				</p:password>
+				
+			</h:panelGrid>
+
+			<h:panelGrid columns="5">
+				<p:button value="Novo" actionListener="#{UsuarioMB.novo()}" />
+
+				<p:commandButton value="Salvar"
+					actionListener="#{UsuarioMB.salvar()}"
+					update=":msgGlobal :frmusucad:pnusucad" />
+
+				<p:commandButton value="Excluir"
+					actionListener="#{UsuarioMB.excluir}" update=":msgGlobal"
+					rendered="#{UsuarioMB.acao == 'Excluir' }" />
+
+				<p:commandButton value="Editar"
+					actionListener="#{UsuarioMB.editar}" update=":msgGlobal"
+					rendered="#{UsuarioMB.acao == 'Editar' }" />
+
+				<p:button value="Voltar" outcome="/pages/UsuarioPesquisa.xhtml" />
+			</h:panelGrid>
+
+
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

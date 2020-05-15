@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<h:head>
+
+	<h:outputStylesheet library="css" name="style.css" />
+	<h:outputScript library="js" name="scripts.js" />
+
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>ManagerPro</title>
+</h:head>
+<h:body>
+
+	<p:growl id="msgGlobal" />
+
+	<p:layout fullPage="true">
+
+		<p:layoutUnit position="north" resizable="true" closable="false"
+			collapsible="false">
+			<h:graphicImage value="#{resource['images/imagem.fw.png']}"
+				height="30" width="190" />
+
+			<h:panelGrid
+				style="width:24%; margin-rigth: 1px; text-align: right ; float:right">
+				<p:panel>
+					<h:form>
+
+
+
+						<h:commandLink action="/pages/MaterialPesquisaFalta.xhtml">
+							<h:graphicImage value="#{resource['images/sino.png']}"
+								height="35" width="35" />
+						</h:commandLink>
+
+						<p:spacer width="10" height="10" />
+						<p:spacer width="10" height="10" />
+
+						<h:graphicImage value="#{resource['images/usuario.png']}"
+							height="35" width="27" style="margin-top:10px" />
+
+						<p:spacer width="10" height="10" />
+						<h:outputLabel>
+
+							<h:outputText
+								value=" #{AutenticacaoMB.usuarioLogado.funcionario.nome }       "
+								style="font-size: 18px; bold" />
+						</h:outputLabel>
+
+					</h:form>
+
+
+
+
+
+
+				</p:panel>
+			</h:panelGrid>
+
+
+		</p:layoutUnit>
+
+		<p:layoutUnit position="west" size="250" resizable="false"
+			closable="false" collapsible="false">
+
+			<h:form id="formInicial">
+				<p:panelMenu>
+
+					<p:submenu label="Arquivo">
+						<p:menuitem value="Principal" outcome="/pages/Principal.xhtml" />
+						<p:menuitem value="Sair" action="#{AutenticacaoMB.logout}"
+							ajax="false">
+						</p:menuitem>
+					</p:submenu>
+
+					<p:submenu label="Cadastros">
+						<p:menuitem value="Funcionarios"
+							outcome="/pages/FuncionarioPesquisa.xhtml"
+							rendered="#{AutenticacaoMB.temPermissoes( ['A' , 'G'])}" />
+						<p:menuitem value="Usuários"
+							outcome="/pages/UsuarioPesquisa.xhtml"
+							rendered="#{AutenticacaoMB.temPermissoes( ['A' , 'G'])}" />
+						<p:menuitem value="Produtos"
+							outcome="/pages/ProdutoPesquisa.xhtml" />
+						<p:menuitem value="Fornecedores"
+							outcome="/pages/FornecedorPesquisa.xhtml" />
+						<p:menuitem value="Materiais"
+							outcome="/pages/MaterialPesquisa.xhtml" />
+						<p:menuitem value="Materiais por metro" outcome="/pages/FitaPesquisa.xhtml" />
+
+					</p:submenu>
+
+					<p:submenu label="Custos"
+						rendered="#{AutenticacaoMB.temPermissoes( ['A' , 'G'])}">
+						<p:menuitem value="Buscar custo"
+							outcome="/pages/CustoPesquisa.xhtml" />
+
+					</p:submenu>
+
+
+					<p:submenu label=" Notas fiscais"
+						rendered="#{AutenticacaoMB.temPermissoes( ['A' , 'G'])}">
+						<p:menuitem value="Nova nota fiscal"
+							outcome="/pages/NFCadastro.xhtml" />
+						<p:menuitem value="Buscar nota fiscal"
+							outcome="/pages/NFPesquisa.xhtml" />
+						<p:menuitem value="Novo pedido" outcome="/pages/NFCadastro.xhtml" />
+					</p:submenu>
+
+					<p:submenu label=" Levantamentos">
+
+						<p:menuitem value=" Produtos "
+							outcome="/pages/ProdutosMaiorMargem.xhtml" />
+						<p:menuitem value=" Produção por intervalos " />
+						<p:menuitem value="Materiais com baixo estoque  "
+							outcome="/pages/MaterialPesquisaFalta.xhtml" />
+						
+						<p:menuitem value="Materiais por metro  "
+							outcome="/pages/MaterialPesquisaFalta.xhtml" />
+							<p:menuitem value="Produtos devolvidos  "
+							outcome="/pages/ProdutoPesquisa.xhtml" />
+					</p:submenu>
+
+					<p:submenu label=" Estatísticas"
+						rendered="#{AutenticacaoMB.temPermissoes( ['A' , 'G'])}">
+						<p:menuitem value="Produtividade "
+							outcome="/pages/Produtividade.xhtml" />
+						<p:menuitem value=" Produtos "
+							outcome="/pages/GraficoMaiorMargem.xhtml" />
+						<p:menuitem value="Filtrar por nome de material "
+							outcome="/pages/Dashboard.xhtml" />
+						<p:menuitem value="Materiais mais utilizados   "
+							outcome="/pages/MateriaisMaiorGiro.xhtml" />
+						<p:menuitem value="Variações de preços   "
+							outcome="/pages/MateriaisMaiorGiro.xhtml" />
+						<p:menuitem value="Funcionários   "
+							outcome="/pages/MateriaisMaiorGiro.xhtml" />
+							<p:menuitem value="Pedidos   "
+							outcome="/pages/GraficoPedidos.xhtml" />
+
+
+					</p:submenu>
+
+					<p:submenu label="Produção">
+						<p:menuitem value="Registrar lote"
+							outcome="/pages/LoteCadastro.xhtml" />
+						<p:menuitem value="Buscar lote"
+							outcome="/pages/LotePesquisa.xhtml" />
+						<p:menuitem value="Registrar produto com defeito"
+							outcome="/pages/LotePesquisa.xhtml" />
+						<p:menuitem value="Registrar material com defeito"
+							outcome="/pages/LotePesquisa.xhtml" />
+						
+					</p:submenu>
+
+
+
+				</p:panelMenu>
+			</h:form>
+
+
+		</p:layoutUnit>
+
+
+		<p:layoutUnit position="center" resizable="false" closable="false"
+			collapsible="false">
+
+			<ui:insert name="conteudo" />
+
+		</p:layoutUnit>
+
+		<p:layoutUnit position="south" size="4%">
+
+
+
+
+		</p:layoutUnit>
+	</p:layout>
+
+
+</h:body>
+</html>

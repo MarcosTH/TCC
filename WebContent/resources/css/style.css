@@ -1,0 +1,47 @@
+.ui-widget, .ui-widget .ui-widget {
+	
+	
+
+	
+font-size: 100% !important;
+}
+#logo{
+	
+	position: fixed;
+	margin-top: 100px;
+}
+body{
+	
+	text-align:justify;
+	text-shadow: true;
+}
+.ui-datatable table{
+	text-align:center;
+	
+}
+
+.ui-button{
+	
+	width: 90px;
+	text-align: center;
+}
+
+.ui-analog-clock {
+        width: 200px;
+    }
+    
+   .imagem:hover{
+   
+    opacity: 0.5; 
+
+   
+    
+    
+   }
+   .box:hover{
+   
+   border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+   
+   
+   }

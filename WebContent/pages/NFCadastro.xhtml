@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/templates/template.xhtml">
+
+	<ui:define name="metadata">
+		<f:metadata>
+
+			<f:event listener="#{MBNF.carregarMateriais()}"
+				type="preRenderView" />
+											
+		</f:metadata>
+	</ui:define>
+	<ui:define name="conteudo">
+	
+		<h:form id="frmnfcad">
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Nota fiscal - Entrada de materiais" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:separator />
+			<h:panelGrid >
+			<p:outputLabel value="Fornecedor:" />
+			<!-- buscar fornecedor -->
+				<p:selectOneMenu filter="true"
+					value="#{MBNF.nf.fornecedor}"
+					converter ="fornecedoresConverter" id="selectFornecedor">
+					<f:selectItem  itemValue="#{MBNF.fornecedor}" itemLabel="Selecione um fornecedor" >
+					
+					</f:selectItem>
+					<f:selectItems value="#{MBNF.listaFornecedores}" var="fornecedor"
+						itemValue="#{fornecedor}" itemLabel="#{fornecedor.nome}"  />
+						
+				</p:selectOneMenu>
+				
+				<p:outputLabel for="datetime" value="Datetime:" />
+        <p:calendar id="datetime" value="#{MBNF.nf.data}" pattern="dd/MM/yyyy" />
+		
+			</h:panelGrid>
+		 			
+			<!--  tabela principal -->
+			<p:dataTable emptyMessage="Nenhum registro cadastrado"
+				value="#{MBNF.materiais}"
+				filteredValue="#{MBNF.materiaisFiltrados}" var="material"
+				rows="6" paginator="true">
+				<p:column headerText="ID">
+					<h:outputText value="#{material.id}" />
+				</p:column>
+				<p:column headerText="Código" filterBy="#{material.codigo}"
+					srtBy="#{material.codigo}">
+					<h:outputText value="#{material.codigo}" />
+				</p:column>
+
+				<p:column headerText="Nome" filterBy="#{material.nome}"
+					srtBy="#{material.nome}">
+					<h:outputText value="#{material.nome}" />
+				</p:column>
+
+				<p:column headerText="Preço Unitário">
+					<h:outputText value="#{material.preco}" >
+					<f:convertNumber locale="pt_BR" minFractionDigits="2" />
+					</h:outputText>
+				</p:column>
+
+              	<p:column headerText="Fornecedor" filterBy="#{material.fornecedor.nome}">
+					<h:outputText value="#{material.fornecedor.nome}" />
+				</p:column>
+
+				<p:column headerText="Opcões">
+					<p:commandButton icon="ui-icon-plus"
+						actionListener="#{MBNF.adicionarMaterial(material)}"
+						update=":frmnfcad:tbitens :frmnfcad:txtValorFinal ">
+
+					</p:commandButton>
+							
+
+				</p:column>
+
+			</p:dataTable>
+
+			<p:separator />
+			<!--  tabela de itens -->
+			<p:dataTable emptyMessage="Nota" value="#{MBNF.itemNf}"
+				var="item" rows="4" paginator="true" id="tbitens" >
+				<p:column headerText="ID">
+					<h:outputText value="#{material.id}" />
+				</p:column>
+
+				<p:column headerText="Nome">
+					<h:outputText value="#{item.material.nome}" />
+				</p:column>
+
+				<p:column headerText="Valor parcial">
+					<h:outputText value="#{item.valorParcial}" >
+					<f:convertNumber locale="pt_BR" minFractionDigits="2" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="quantidade">
+				<p:inputText value="#{item.quantidade}">
+				</p:inputText>
+				
+				</p:column>
+
+				<p:column headerText="opcoes">
+					<p:commandButton icon="ui-icon-minus"
+						actionListener="#{MBNF.remover(item)}"
+						update=":frmnfcad:tbitens :frmnfcad:txtValorFinal " />
+				</p:column>
+
+			</p:dataTable>
+			<p:separator />
+
+			<h:panelGrid columns="1">
+
+				<h:outputText id="txtValorFinal"
+				
+					value="#{MBNF.nf.total}">
+					<f:convertNumber pattern="#,##0.00"/>
+					 </h:outputText>
+				<p:commandButton value="Finalizar Entrada" actionListener="#{MBNF.carregarDados}"
+					oncomplete="PF('dlgNF').show()" update=":frmnfcad :dial" ></p:commandButton>
+					<p:commandButton value="Relatório" ajax="false"
+				actionListener="#{MBNF.visualizarPDF2()}" />
+			</h:panelGrid>
+
+		</h:form>
+
+		<p:dialog closable="true" draggable="true" resizable="false"
+			modal="true" header="Finalizar Entrada" widgetVar="dlgNF"
+			appendTo="@(body)" id="dial">
+			<h:form>
+				<h:panelGrid columns="2">
+					<h:outputText value="Data" />
+					<h:outputText value="#{MBNF.nf.data}" >
+					<f:convertDateTime pattern="dd/MM/yyyy"/>
+					</h:outputText>
+					<h:outputText value="Fornecedor" />
+					<h:outputText  value="#{MBNF.fornecedor.nome}" />
+					<h:outputText value="Total nota" />
+					<h:outputText value="#{MBNF.nf.total}" />
+					
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+
+						<p:commandButton value="Salvar Nota fiscal" actionListener="#{MBNF.salvar()}" update=":msgGlobal :frmnfcad:tbitens :frmnfcad:txtValorFinal :frmnfcad:selectFornecedor " 
+						onclick="PF('dlgNF').hide()"></p:commandButton>
+						<p:commandButton value="Voltar" onclick="PF('dlgNF').hide()"></p:commandButton>
+					
+				</h:panelGrid>
+			</h:form>
+
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>
